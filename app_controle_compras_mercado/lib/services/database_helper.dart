@@ -1,8 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper _instance = DatabaseHelper.internal();
-  factory DatabaseHelper() => _instance;
+  static final DatabaseHelper instance = DatabaseHelper.internal();
+  factory DatabaseHelper() => instance;
   
   DatabaseHelper.internal();
   
@@ -25,25 +25,27 @@ class DatabaseHelper {
     );
   }
 
-  void _createDB(Database db, int version) async {
-    const userTable = '''CREATE TABLE User(
+  Future _createDB(Database db, int version) async {
+    const userTable = '''CREATE TABLE users(
                           idUser INTEGER PRIMARY KEY, 
                           nome TEXT NOT NULL,
-                          senha TEXT NOT NULL)''';
+                          email TEXT NOT NULL,
+                          senha TEXT NOT NULL
+                          imagemUrl TEXT)''';
     
-    const compraTable = '''CREATE TABLE Compra(
+    const compraTable = '''CREATE TABLE compras(
                           idCompra INTEGER PRIMARY KEY, 
                           idUser INTEGER NOT NULL,
                           data TEXT NOT NULL,
                           precoTotal REAL NOT NULL,
                           FOREIGN KEY (idUser) REFERENCES User(idUser)''';
     
-    const produtoTable = '''CREATE TABLE Produto(
+    const produtoTable = '''CREATE TABLE produtos(
                           idProduto INTEGER PRIMARY KEY, 
                           nome TEXT NOT NULL,
                           imagemUrl TEXT)''';
     
-    const compraProdutoTable = '''CREATE TABLE CompraProduto(
+    const compraProdutoTable = '''CREATE TABLE compraProduto(
                           idCompraProduto INTEGER PRIMARY KEY, 
                           idCompra INTEGER NOT NULL,
                           idProduto INTEGER NOT NULL,
