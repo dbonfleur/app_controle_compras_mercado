@@ -32,10 +32,12 @@ class CadastroBloc extends Bloc<CadastroEvent, CadastroState> {
         imageBase64 = base64Encode(bytes);
       }
 
+      final hashPassword = User.hashPassword(event.senha);
+
       final user = User(
         nome: event.nome,
         email: event.email,
-        senha: event.senha,
+        senha: hashPassword,
         imagemUrl: imageBase64,
       );
 

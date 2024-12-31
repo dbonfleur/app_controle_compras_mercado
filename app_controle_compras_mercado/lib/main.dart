@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_controle_compras_mercado/blocs/auth/auth_bloc.dart';
+import 'package:app_controle_compras_mercado/screens/home_screen.dart';
 import 'package:app_controle_compras_mercado/screens/login_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 import 'blocs/cadastro/cadastro_bloc.dart';
+import 'blocs/page/page_bloc.dart';
 import 'blocs/theme/theme_bloc.dart';
 import 'blocs/theme/theme_state.dart';
 import 'blocs/user/user_bloc.dart';
@@ -45,10 +47,11 @@ class MercadoApp extends StatelessWidget {
             title: 'Compras de Mercado',
             debugShowCheckedModeBanner: false,
             theme: state.themeData,
-            initialRoute: '/',
+            initialRoute: '/login',
             routes: {
-              '/': (context) => const LoginScreen(),
+              '/login': (context) => const LoginScreen(),
               '/cadastro': (context) => const CadastroScreen(),
+              '/' : (context) => HomeScreen(),
             },
           );
         },
@@ -69,6 +72,9 @@ class MercadoApp extends StatelessWidget {
       ),
       BlocProvider<CadastroBloc>(
         create: (context) => CadastroBloc(),
+      ),
+      BlocProvider<PageBloc>(
+        create: (context) => PageBloc(),
       ),
     ];
   }

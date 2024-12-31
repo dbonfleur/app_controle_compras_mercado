@@ -1,3 +1,4 @@
+import 'package:app_controle_compras_mercado/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,7 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _rememberMe = false;
 
@@ -24,9 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           children: [
             TextField(
-              controller: _usernameController,
+              controller: _emailController,
               decoration: InputDecoration(
-                labelText: 'Usuário',
+                labelText: 'Email',
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
               ),
               cursorColor: Colors.purple,
@@ -59,12 +60,12 @@ class _LoginScreenState extends State<LoginScreen> {
             BlocConsumer<AuthBloc, AuthState>(
               listener: (context, state) {
                 if (state is AuthSuccess) {
-                  // Navigator.pushReplacement(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => HomeScreen(), 
-                  //   ),
-                  // );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeScreen(), 
+                    ),
+                  );
                 } else if (state is AuthFailure) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.error)),
@@ -77,10 +78,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
                 return ElevatedButton(
                   onPressed: () {
-                    final username = _usernameController.text;
+                    final email = _emailController.text;
                     final password = _passwordController.text;
                     BlocProvider.of<AuthBloc>(context).add(
-                      LoginRequested(username, password, _rememberMe, context),
+                      LoginRequested(email, password, _rememberMe, context),
                     );
                   },
                   style: ElevatedButton.styleFrom(

@@ -45,7 +45,7 @@ class DatabaseHelper {
                             idUser INTEGER NOT NULL,
                             data TEXT NOT NULL,
                             precoTotal REAL NOT NULL,
-                            FOREIGN KEY (idUser) REFERENCES users(idUser)
+                            FOREIGN KEY (idUser) REFERENCES users(idUser) ON DELETE CASCADE
                           )''';
     
     const produtoTable = '''CREATE TABLE produtos(
@@ -59,8 +59,8 @@ class DatabaseHelper {
                                   idProduto INTEGER NOT NULL,
                                   qtdeProduto INTEGER NOT NULL,
                                   valorUnitario REAL NOT NULL,
-                                  FOREIGN KEY (idCompra) REFERENCES compras(idCompra),
-                                  FOREIGN KEY (idProduto) REFERENCES produtos(idProduto)
+                                  FOREIGN KEY (idCompra) REFERENCES compras(idCompra) ON DELETE CASCADE,
+                                  FOREIGN KEY (idProduto) REFERENCES produtos(idProduto) ON DELETE CASCADE
                                 )''';  
     
     await db.execute(userTable);

@@ -37,3 +37,4 @@ class SignInUser extends UserEvent {
   List<Object> get props => [email, password];
 }
 
+class LogoutUserEvent extends UserEvent {}
