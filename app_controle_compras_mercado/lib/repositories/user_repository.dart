@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 import '../models/user_model.dart' as user_model;
+import '../models/user_model.dart';
 import '../services/database_helper.dart';
 
 class UserRepository {
@@ -12,9 +13,10 @@ class UserRepository {
     return _database.db;
   }
 
-  Future<void> createUser(Map<String, dynamic> user) async {
+  Future<int> createUser(User user) async {
     final db = await database;
-    await db.insert('users', user, conflictAlgorithm: ConflictAlgorithm.replace);
+    final id = await db.insert('users', user.toMap());
+    return id;
   }
 
   Future<user_model.User?> getUserByEmail(String email) async {

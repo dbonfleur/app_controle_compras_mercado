@@ -21,7 +21,7 @@ class UserInitial extends UserState {}
 class UserLoading extends UserState {}
 
 class UserSignedIn extends UserState {
-  final user_model.User user;
+  final User user;
 
   const UserSignedIn({required this.user});
 

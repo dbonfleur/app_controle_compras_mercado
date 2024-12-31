@@ -9,10 +9,12 @@ import 'package:nested/nested.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
+import 'blocs/cadastro/cadastro_bloc.dart';
 import 'blocs/theme/theme_bloc.dart';
 import 'blocs/theme/theme_state.dart';
 import 'blocs/user/user_bloc.dart';
 import 'repositories/user_repository.dart';
+import 'screens/cadastro_screen.dart';
 import 'services/database_helper.dart';
 
 void main() async {
@@ -45,7 +47,8 @@ class MercadoApp extends StatelessWidget {
             theme: state.themeData,
             initialRoute: '/',
             routes: {
-              '/': (context) => const LoginScreen()
+              '/': (context) => const LoginScreen(),
+              '/cadastro': (context) => const CadastroScreen(),
             },
           );
         },
@@ -63,6 +66,9 @@ class MercadoApp extends StatelessWidget {
       ),
       BlocProvider<AuthBloc>(
         create: (context) => AuthBloc(userRepository),
+      ),
+      BlocProvider<CadastroBloc>(
+        create: (context) => CadastroBloc(),
       ),
     ];
   }

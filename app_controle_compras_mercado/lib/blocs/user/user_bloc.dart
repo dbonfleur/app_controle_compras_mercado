@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../models/user_model.dart' as user_model;
 import '../../models/user_model.dart';
 import '../../repositories/user_repository.dart';
 
@@ -14,15 +13,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc(this.userRepository) : super(UserInitial()) {
     on<CreateUser>((event, emit) async {
       emit(UserLoading());
-      final user = event.user;
-      final userMap = {
-        'id': user.id,
-        'email': user.email,
-        'nome': user.nome,
-        'imagemUrl': user.imagemUrl,
-      };
-      await userRepository.createUser(userMap);
-      emit(UserCreated(id: user.id!));
+      final id = await userRepository.createUser(event.user);
+      emit(UserCreated(id: id));
     });
 
     on<SignInUser>((event, emit) async {

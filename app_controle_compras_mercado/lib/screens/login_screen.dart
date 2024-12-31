@@ -23,8 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Image.asset('assets/images/logo.webp', height: 300),
-            const SizedBox(height: 20),
             TextField(
               controller: _usernameController,
               decoration: InputDecoration(
@@ -99,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 30),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/register');
+                Navigator.pushNamed(context, '/cadastro');
               },
               child: const Text('Não possui uma conta? Cadastre-se'),
             ),

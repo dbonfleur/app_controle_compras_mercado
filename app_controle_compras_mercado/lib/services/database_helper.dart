@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
@@ -15,8 +17,13 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDb(String filePath) async {
-    final databasesPath = await getDatabasesPath();
-    final path = databasesPath + filePath;
+    String path;
+    if (kIsWeb) {
+      path = filePath;
+    } else {
+      final databasesPath = await getDatabasesPath();
+      path = join(databasesPath, filePath);
+    }
 
     return await openDatabase(
       path, 
@@ -27,32 +34,34 @@ class DatabaseHelper {
 
   Future _createDB(Database db, int version) async {
     const userTable = '''CREATE TABLE users(
-                          idUser INTEGER PRIMARY KEY, 
+                          id INTEGER PRIMARY KEY AUTOINCREMENT, 
                           nome TEXT NOT NULL,
                           email TEXT NOT NULL,
-                          senha TEXT NOT NULL
+                          senha TEXT NOT NULL,
                           imagemUrl TEXT)''';
     
     const compraTable = '''CREATE TABLE compras(
-                          idCompra INTEGER PRIMARY KEY, 
-                          idUser INTEGER NOT NULL,
-                          data TEXT NOT NULL,
-                          precoTotal REAL NOT NULL,
-                          FOREIGN KEY (idUser) REFERENCES User(idUser)''';
+                            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                            idUser INTEGER NOT NULL,
+                            data TEXT NOT NULL,
+                            precoTotal REAL NOT NULL,
+                            FOREIGN KEY (idUser) REFERENCES users(idUser)
+                          )''';
     
     const produtoTable = '''CREATE TABLE produtos(
-                          idProduto INTEGER PRIMARY KEY, 
+                          id INTEGER PRIMARY KEY AUTOINCREMENT, 
                           nome TEXT NOT NULL,
                           imagemUrl TEXT)''';
     
     const compraProdutoTable = '''CREATE TABLE compraProduto(
-                          idCompraProduto INTEGER PRIMARY KEY, 
-                          idCompra INTEGER NOT NULL,
-                          idProduto INTEGER NOT NULL,
-                          qtdeProduto INTEGER NOT NULL,
-                          valorUnitario REAL NOT NULL,
-                          FOREIGN KEY (idCompra) REFERENCES Compra(idCompra),
-                          FOREIGN KEY (idProduto) REFERENCES Produto(idProduto)''';  
+                                  id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                                  idCompra INTEGER NOT NULL,
+                                  idProduto INTEGER NOT NULL,
+                                  qtdeProduto INTEGER NOT NULL,
+                                  valorUnitario REAL NOT NULL,
+                                  FOREIGN KEY (idCompra) REFERENCES compras(idCompra),
+                                  FOREIGN KEY (idProduto) REFERENCES produtos(idProduto)
+                                )''';  
     
     await db.execute(userTable);
     await db.execute(compraTable);
