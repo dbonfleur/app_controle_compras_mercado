@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:app_controle_compras_mercado/blocs/auth/auth_bloc.dart';
+import 'package:app_controle_compras_mercado/screens/compras_screen.dart';
+import 'package:app_controle_compras_mercado/screens/historico_screen.dart';
 import 'package:app_controle_compras_mercado/screens/home_screen.dart';
 import 'package:app_controle_compras_mercado/screens/login_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -49,9 +51,11 @@ class MercadoApp extends StatelessWidget {
             theme: state.themeData,
             initialRoute: '/login',
             routes: {
+              '/' : (context) => HomeScreen(),
               '/login': (context) => const LoginScreen(),
               '/cadastro': (context) => const CadastroScreen(),
-              '/' : (context) => HomeScreen(),
+              '/compras': (context) => ComprasScreen(),
+              '/historico': (context) => HistoricoScreen(),
             },
           );
         },

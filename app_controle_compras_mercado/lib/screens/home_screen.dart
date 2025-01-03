@@ -1,3 +1,4 @@
+import 'package:app_controle_compras_mercado/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,12 +7,16 @@ import '../blocs/page/page_event.dart';
 import '../blocs/page/page_state.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/drawer_menu.dart';
+import 'compras_screen.dart';
+import 'historico_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   final List<Widget> _pages = [
-    
+    const ComprasScreen(),
+    const HistoricoScreen(),
+    const SettingsScreen(),
   ];
 
    @override

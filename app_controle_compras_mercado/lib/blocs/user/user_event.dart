@@ -37,4 +37,23 @@ class SignInUser extends UserEvent {
   List<Object> get props => [email, password];
 }
 
+class UpdateUserImage extends UserEvent {
+  final String imageBase64;
+
+  const UpdateUserImage(this.imageBase64);
+
+  @override
+  List<Object> get props => [imageBase64];
+}
+
+class UpdateUserPassword extends UserEvent {
+  final String newPassword;
+  final String oldPassword;
+
+  const UpdateUserPassword(this.newPassword, this.oldPassword);
+
+  @override
+  List<Object> get props => [newPassword, oldPassword];
+}
+
 class LogoutUserEvent extends UserEvent {}

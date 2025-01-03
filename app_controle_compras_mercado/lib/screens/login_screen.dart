@@ -24,16 +24,22 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
+            TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
               ),
               cursorColor: Colors.purple,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Por favor, insira um email';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 20),
-            TextField(
+            TextFormField(
               controller: _passwordController,
               decoration: InputDecoration(
                 labelText: 'Senha',
@@ -41,6 +47,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               obscureText: true,
               cursorColor: Colors.purple,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Por favor, insira uma senha';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 20),
             Row(
@@ -75,9 +87,16 @@ class _LoginScreenState extends State<LoginScreen> {
               builder: (context, state) {
                 if (state is AuthLoading) {
                   return const CircularProgressIndicator();
+                } else if(state is AuthFailure) {
                 }
                 return ElevatedButton(
                   onPressed: () {
+                    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Por favor, preencha todos os campos')),
+                      );
+                      return;
+                    }
                     final email = _emailController.text;
                     final password = _passwordController.text;
                     BlocProvider.of<AuthBloc>(context).add(

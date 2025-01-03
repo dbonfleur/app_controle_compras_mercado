@@ -1,9 +1,9 @@
+import 'package:app_controle_compras_mercado/blocs/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/theme/theme_bloc.dart';
 import '../blocs/theme/theme_event.dart';
 import '../blocs/theme/theme_state.dart';
-import '../blocs/user/user_bloc.dart';
 import 'dart:convert';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -13,7 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, themeState) {
-        return BlocBuilder<UserBloc, UserState>(
+        return BlocBuilder<AuthBloc, AuthState>(
           builder: (context, userState) {
             return AppBar(
               automaticallyImplyLeading: false,
@@ -26,7 +26,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         onTap: () {
                           Scaffold.of(context).openDrawer();
                         },
-                        child: userState is UserSignedIn
+                        child: userState is AuthSuccess
                             ? CircleAvatar(
                                 backgroundColor: Colors.white,
                                 backgroundImage: userState.user.imagemUrl != null

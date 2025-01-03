@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_controle_compras_mercado/blocs/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,9 +27,9 @@ class DrawerMenu extends StatelessWidget {
           child: Drawer(
             child: Column(
               children: <Widget>[
-                BlocBuilder<UserBloc, UserState>(
+                BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
-                    if (state is UserSignedIn) {
+                    if (state is AuthSuccess) {
                       return Column(
                         children: [
                           Stack(
@@ -58,7 +59,7 @@ class DrawerMenu extends StatelessWidget {
                                     color: themeState.themeData.iconTheme.color,
                                   ),
                                   onPressed: () {
-                                    onItemTapped(4);
+                                    onItemTapped(2);
                                   },
                                 ),
                               ),
@@ -67,19 +68,19 @@ class DrawerMenu extends StatelessWidget {
                           _buildMenuItem(
                             context,
                             themeState,
-                            icon: Icons.home,
-                            text: 'Início',
+                            icon: Icons.shopping_cart,
+                            text: 'Compras',
                             index: 0,
                             selectedIndex: selectedIndex,
                           ),
-                          // _buildMenuItem(
-                          //   context,
-                          //   themeState,
-                          //   icon: Icons.fitness_center,
-                          //   text: 'Treinos',
-                          //   index: 1,
-                          //   selectedIndex: selectedIndex,
-                          // ),
+                          _buildMenuItem(
+                            context,
+                            themeState,
+                            icon: Icons.history,
+                            text: 'Histórico',
+                            index: 1,
+                            selectedIndex: selectedIndex,
+                          ),
                           // _buildMenuItem(
                           //   context,
                           //   themeState,
@@ -138,8 +139,8 @@ class DrawerMenu extends StatelessWidget {
                   leading: const Icon(Icons.exit_to_app, color: Colors.red),
                   title: const Text('Deslogar', style: TextStyle(color: Colors.red)),
                   onTap: () async {
-                    context.read<UserBloc>().add(LogoutUserEvent());
-                    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+                    context.read<AuthBloc>().add(LogoutRequested());
+                    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
                   },
                 ),
               ],

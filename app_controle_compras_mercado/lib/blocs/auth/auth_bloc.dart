@@ -34,8 +34,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await prefs.remove('email');
           await prefs.remove('isLogged');
         }
+        BlocProvider.of<UserBloc>(event.context).add(LoadUser(user.id!));
         emit(AuthSuccess(user: user));
-      } 
+      } else {
+        emit(AuthFailure(error: 'Usuário não encontrado'));
+      }
     } catch (e) {
       emit(AuthFailure(error: e.toString()));
     }

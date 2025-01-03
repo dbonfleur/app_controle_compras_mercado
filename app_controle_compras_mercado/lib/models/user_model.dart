@@ -52,4 +52,24 @@ class User {
       imagemUrl: imagemUrl,
     );
   }
+
+  copyWithImagemUrl(String? imagemUrl) {
+    return User(
+      id: id,
+      nome: nome,
+      email: email,
+      senha: senha,
+      imagemUrl: imagemUrl,
+    );
+  }
+
+  copyWithPassword(String password) {
+    return User(
+      id: id,
+      nome: nome,
+      email: email,
+      senha: password,
+      imagemUrl: imagemUrl,
+    );
+  }
 }

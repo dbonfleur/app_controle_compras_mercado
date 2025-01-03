@@ -46,5 +46,30 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
       emit(UserInitial());
     });
+
+    on<UpdateUserImage>((event, emit) async {
+      var user = (state as UserLoaded).user;
+      if(event.imageBase64.isEmpty) {
+        user = (state as UserLoaded).user.copyWithImagemUrl(null);
+      } else {
+        user = (state as UserLoaded).user.copyWithImagemUrl(event.imageBase64);
+      }
+      await userRepository.updateUser(user);
+      emit(UserLoaded(user: user));
+    });
+
+    on<UpdateUserPassword>((event, emit) async {
+      final user = (state as UserLoaded).user;
+      final hashedOldPassword = User.hashPassword(event.oldPassword);
+      
+      if (user.senha == hashedOldPassword) {
+        final updatedUser = user
+            .copyWithPassword(User.hashPassword(event.newPassword));
+        await userRepository.updateUser(updatedUser);
+        emit(UserLoaded(user: updatedUser));
+      } else {
+        emit(const UserError('Senha antiga não confere'));
+      }
+    });
   }
 }
