@@ -1,13 +1,13 @@
 class CompraProduto {
   final int? id;
-  final int idCompra;
+  final int? idCompra;
   final int idProduto;
   final int qtdeProduto;
   final double valorUnitario;
 
   CompraProduto({
     this.id,
-    required this.idCompra,
+    this.idCompra,
     required this.idProduto,
     required this.qtdeProduto,
     required this.valorUnitario,

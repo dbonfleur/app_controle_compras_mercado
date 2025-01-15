@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:app_controle_compras_mercado/blocs/auth/auth_bloc.dart';
+import 'package:app_controle_compras_mercado/blocs/produto/produto_bloc.dart';
+import 'package:app_controle_compras_mercado/repositories/categoria_repository.dart';
+import 'package:app_controle_compras_mercado/repositories/produto_repository.dart';
 import 'package:app_controle_compras_mercado/screens/compras_screen.dart';
 import 'package:app_controle_compras_mercado/screens/historico_screen.dart';
 import 'package:app_controle_compras_mercado/screens/home_screen.dart';
@@ -13,13 +16,15 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 import 'blocs/cadastro/cadastro_bloc.dart';
+import 'blocs/categoria/categoria_bloc.dart';
+import 'blocs/compra/compra_bloc.dart';
 import 'blocs/page/page_bloc.dart';
 import 'blocs/theme/theme_bloc.dart';
 import 'blocs/theme/theme_state.dart';
 import 'blocs/user/user_bloc.dart';
+import 'repositories/compra_repository.dart';
 import 'repositories/user_repository.dart';
 import 'screens/cadastro_screen.dart';
-import 'services/database_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +40,10 @@ void main() async {
 }
 
 class MercadoApp extends StatelessWidget {
-  final userRepository = UserRepository(DatabaseHelper.instance);
+  final userRepository = UserRepository();
+  final produtoRepository = ProdutoRepository();
+  final compraRepository = CompraRepository();
+  final categoriaRepository = CategoriaRepository();
   
   MercadoApp({super.key});
 
@@ -79,6 +87,15 @@ class MercadoApp extends StatelessWidget {
       ),
       BlocProvider<PageBloc>(
         create: (context) => PageBloc(),
+      ),
+      BlocProvider<CompraBloc>(
+        create: (context) => CompraBloc(compraRepository),
+      ),
+      BlocProvider<ProdutoBloc>(
+        create: (context) => ProdutoBloc(produtoRepository),
+      ),
+      BlocProvider<CategoriaBloc>(
+        create: (context) => CategoriaBloc(categoriaRepository),
       ),
     ];
   }

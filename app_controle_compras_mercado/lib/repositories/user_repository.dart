@@ -4,12 +4,10 @@ import '../models/user_model.dart';
 import '../services/database_helper.dart';
 
 class UserRepository {
-  final DatabaseHelper _database;
-
-  UserRepository(this._database);
+  final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 
   Future<Database> get database async {
-    return _database.db;
+    return _databaseHelper.db;
   }
 
   Future<int> createUser(User user) async {

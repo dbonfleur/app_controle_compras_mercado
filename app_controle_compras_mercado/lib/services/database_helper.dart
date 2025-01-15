@@ -28,8 +28,20 @@ class DatabaseHelper {
     return await openDatabase(
       path, 
       version: 2, 
-      onCreate: _createDB
+      onCreate: _createDB,
+      onUpgrade: _upgradeDB,
     );
+  }
+
+  Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < newVersion) {
+      await db.execute('DROP TABLE IF EXISTS users');
+      await db.execute('DROP TABLE IF EXISTS compras');
+      await db.execute('DROP TABLE IF EXISTS produtos');
+      await db.execute('DROP TABLE IF EXISTS compraProduto');
+      
+      await _createDB(db, newVersion);
+    }
   }
 
   Future _createDB(Database db, int version) async {
@@ -45,13 +57,22 @@ class DatabaseHelper {
                             idUser INTEGER NOT NULL,
                             data TEXT NOT NULL,
                             precoTotal REAL NOT NULL,
-                            FOREIGN KEY (idUser) REFERENCES users(idUser) ON DELETE CASCADE
+                            FOREIGN KEY (idUser) REFERENCES users(id) ON DELETE CASCADE
                           )''';
+
+    const categoriaTable = '''CREATE TABLE categorias(
+                              id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                              nome TEXT NOT NULL
+                              )''';
     
     const produtoTable = '''CREATE TABLE produtos(
-                          id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                          id INTEGER PRIMARY KEY AUTOINCREMENT,
+                          idCategoria INTEGER NOT NULL,
                           nome TEXT NOT NULL,
-                          imagemUrl TEXT)''';
+                          imagemUrl TEXT,
+                          preco REAL NOT NULL,
+                          FOREIGN KEY (idCategoria) REFERENCES categorias(id) ON DELETE CASCADE
+                          )''';
     
     const compraProdutoTable = '''CREATE TABLE compraProduto(
                                   id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -59,12 +80,13 @@ class DatabaseHelper {
                                   idProduto INTEGER NOT NULL,
                                   qtdeProduto INTEGER NOT NULL,
                                   valorUnitario REAL NOT NULL,
-                                  FOREIGN KEY (idCompra) REFERENCES compras(idCompra) ON DELETE CASCADE,
-                                  FOREIGN KEY (idProduto) REFERENCES produtos(idProduto) ON DELETE CASCADE
+                                  FOREIGN KEY (idCompra) REFERENCES compras(id) ON DELETE CASCADE,
+                                  FOREIGN KEY (idProduto) REFERENCES produtos(id) ON DELETE CASCADE
                                 )''';  
     
     await db.execute(userTable);
     await db.execute(compraTable);
+    await db.execute(categoriaTable);
     await db.execute(produtoTable);
     await db.execute(compraProdutoTable);
   }

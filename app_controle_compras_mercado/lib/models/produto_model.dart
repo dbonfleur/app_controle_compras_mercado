@@ -1,20 +1,25 @@
 class Produto {
   final int? id;
+  final int idCategoria;
   final String nome;
   final String? imagemUrl;
-
+  final double preco;
 
   Produto({
     this.id,
     required this.nome,
-    this.imagemUrl
+    required this.idCategoria,
+    this.imagemUrl,
+    required this.preco
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'idCategoria': idCategoria,
       'nome': nome,
-      'imagemUrl': imagemUrl
+      'imagemUrl': imagemUrl,
+      'preco': preco
     };
   }
 
@@ -22,7 +27,9 @@ class Produto {
     return Produto(
       id: map['id'],
       nome: map['nome'],
-      imagemUrl: map['imagemUrl']
+      idCategoria: map['idCategoria'],
+      imagemUrl: map['imagemUrl'],
+      preco: map['preco']
     );
   }
 }

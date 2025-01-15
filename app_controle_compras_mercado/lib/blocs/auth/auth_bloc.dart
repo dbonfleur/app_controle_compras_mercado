@@ -24,9 +24,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final user = await _userRepository.signInWithEmail(event.email, event.password);
       if(user != null) {
+        final prefs = await SharedPreferences.getInstance();
         if(event.rememberMe) {
           BlocProvider.of<UserBloc>(event.context).add(LoadUser(user.id!));
-          final prefs = await SharedPreferences.getInstance();
           await prefs.setString('email', event.email);
           await prefs.setBool('isLogged', true);
         } else {
@@ -34,6 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await prefs.remove('email');
           await prefs.remove('isLogged');
         }
+        await prefs.setInt('idUser', user.id!);
         BlocProvider.of<UserBloc>(event.context).add(LoadUser(user.id!));
         emit(AuthSuccess(user: user));
       } else {
@@ -52,7 +53,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final email = prefs.getString('email');
       if(email != null) {
         final user = await _userRepository.getUserByEmail(email);
-        emit(AuthSuccess(user: user!));
+        if (user != null) {
+          emit(AuthSuccess(user: user));
+        } else {
+          emit(AuthInitial());
+        }
       } else {
         emit(AuthInitial());
       }
